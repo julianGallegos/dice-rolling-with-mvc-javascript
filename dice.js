@@ -1,7 +1,9 @@
+//---------------------------model-----------------------------
+
 //create a new dice object
 
-var Die = function(){
-
+function Die (){
+	this.value = 0;
 }
 
 //sets a prototype to each die instant created to have a constant number of sides set to 6
@@ -13,12 +15,12 @@ Die.prototype.roll = function(){
 	return rollResults
 }
 
-var Game = function(){
-	this.diceHolder = []
+function Game(){
+	this.diceHolder = [];
 }
 
-Game.prototype.addNewDie = function(){
-	this.diceHolder.push(new Die)
+Game.prototype.addDie = function(){
+	this.diceHolder.push(new Die());
 }
 
 Game.prototype.rollAllDie = function(){
@@ -27,7 +29,59 @@ Game.prototype.rollAllDie = function(){
 	}
 }
 
-myDie = new Die
+//---------------------------view-----------------------------
 
-myGame = new Game
+function View (){
+	this.addDiceButton = '#roller button.add';
+	this.rollAllDiceButton = '#roller button.roll';
+}
+
+View.prototype.addDie = function(){
+	$('.dice').append('<div class="die">0</div');
+}
+
+
+
+
+//---------------------------controller-----------------------------
+
+function Controller(view, model){
+	this.view = view;
+	this.model = model;
+}
+
+Controller.prototype.addDie = function(){
+	this.model.addDie();
+	this.view.addDie();
+}
+
+Controller.prototype.rollAllDie = function(){
+	console.log("rolling all die")
+}
+
+Controller.prototype.addEventHandlers = function(){
+	$(this.view.addDiceButton).on('click', this.addDie.bind(this));
+	$(this.view.rollAllDiceButton).on('click', this.rollAllDie.bind(this));
+}
+
+$(document).ready (function() {
+  app = new Controller(new View(), new Game());
+  app.addEventHandlers()
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
