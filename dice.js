@@ -11,8 +11,7 @@ Die.prototype.NUMBER_OF_SIDES = 6
 
 //creates a prototype roll function that renders the results of a  random number between 1 and 6 and returns the roll results to the view
 Die.prototype.roll = function(){
-	var rollResults = Math.floor(Math.random() * this.NUMBER_OF_SIDES + 1)
-	return rollResults
+	this.value = Math.floor(Math.random() * this.NUMBER_OF_SIDES + 1)
 }
 
 function Game(){
@@ -25,7 +24,7 @@ Game.prototype.addDie = function(){
 
 Game.prototype.rollAllDie = function(){
 	for(var i = 0; i < this.diceHolder.length; i++){
-		console.log(this.diceHolder[i].roll())
+		this.diceHolder[i].roll();
 	}
 }
 
@@ -39,6 +38,13 @@ function View (){
 View.prototype.addDie = function(){
 	$('.dice').append('<div class="die">0</div');
 }
+
+View.prototype.shakeAllDice = function(dice){
+	$('.die').each(function shake(index,element){
+		$(element).text(dice[index].value)
+	});
+}
+
 
 
 
@@ -56,7 +62,8 @@ Controller.prototype.addDie = function(){
 }
 
 Controller.prototype.rollAllDie = function(){
-	console.log("rolling all die")
+	this.model.rollAllDie()
+	this.view.shakeAllDice(this.model.diceHolder)
 }
 
 Controller.prototype.addEventHandlers = function(){
