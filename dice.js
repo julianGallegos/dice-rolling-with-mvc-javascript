@@ -1,94 +1,70 @@
-//---------------------------model-----------------------------
+//=========================view=============================
 
-//create a new dice object
-
-function Die (){
-	this.value = 0;
+function Die(){
+	this.value = 0
 }
 
-//sets a prototype to each die instant created to have a constant number of sides set to 6
 Die.prototype.NUMBER_OF_SIDES = 6
 
-//creates a prototype roll function that renders the results of a  random number between 1 and 6 and returns the roll results to the view
 Die.prototype.roll = function(){
 	this.value = Math.floor(Math.random() * this.NUMBER_OF_SIDES + 1)
 }
 
 function Game(){
-	this.diceHolder = [];
+	this.diceHolder = []
 }
 
-Game.prototype.addDie = function(){
-	this.diceHolder.push(new Die());
+Game.prototype.addNewDice = function(){
+	this.diceHolder.push(new Die)
 }
 
-Game.prototype.rollAllDie = function(){
-	for(var i = 0; i < this.diceHolder.length; i++){
+Game.prototype.rollDice = function(){
+	for (var i = 0; i < this.diceHolder.length; i++){
 		this.diceHolder[i].roll();
 	}
 }
 
-//---------------------------view-----------------------------
+//=========================view============================
 
-function View (){
-	this.addDiceButton = '#roller button.add';
-	this.rollAllDiceButton = '#roller button.roll';
+function View(){
+	this.bindAddButton = '#roller button.add'
+	this.rollAllDiceButton = '#roller button.roll'
 }
 
-View.prototype.addDie = function(){
-	$('.dice').append('<div class="die">0</div');
+View.prototype.renderDiceOnView = function(){
+	$('.dice').append('<div class="die">0</div>')
 }
 
-View.prototype.shakeAllDice = function(dice){
-	$('.die').each(function shake(index,element){
+View.prototype.rollViewDice = function(dice){
+	$('.die').each(function renderResults(index, element){
 		$(element).text(dice[index].value)
 	});
 }
 
+//=========================controller======================
 
-
-
-
-//---------------------------controller-----------------------------
-
-function Controller(view, model){
-	this.view = view;
+function Controller(model, view){
 	this.model = model;
+	this.view = view;
 }
 
-Controller.prototype.addDie = function(){
-	this.model.addDie();
-	this.view.addDie();
+Controller.prototype.addDice = function(){
+	this.model.addNewDice();
+	this.view.renderDiceOnView();
 }
 
-Controller.prototype.rollAllDie = function(){
-	this.model.rollAllDie()
-	this.view.shakeAllDice(this.model.diceHolder)
+Controller.prototype.rollAllDice = function(){
+	this.model.rollDice();
+	this.view.rollViewDice(this.model.diceHolder);
 }
 
-Controller.prototype.addEventHandlers = function(){
-	$(this.view.addDiceButton).on('click', this.addDie.bind(this));
-	$(this.view.rollAllDiceButton).on('click', this.rollAllDie.bind(this));
+Controller.prototype.bindEventListeners = function(){
+	$(this.view.bindAddButton).on('click', this.addDice.bind(this));
+	$(this.view.rollAllDiceButton).on('click', this.rollAllDice.bind(this));
 }
 
-$(document).ready (function() {
-  app = new Controller(new View(), new Game());
-  app.addEventHandlers()
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$(document).ready(function(){
+	var myGame = new Controller(new Game(), new View());
+	myGame.bindEventListeners();
+})
 
